@@ -4,7 +4,7 @@
  * Requires bt.js
  * May be run in Node.js or browser. (thus the function check)
 **/
-if (typeof(requireFromPublicJs)==='function') bt = requireFromPublicJs('bt').bt;
+if (typeof(require)==='function') bt = require('bt').bt;
 
 bt.extend(bt,{
   //
