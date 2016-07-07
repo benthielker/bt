@@ -278,6 +278,17 @@ bt.extend(bt,{
 //
 bt.extend(bt,{
   
+  //
+  // Bracketed lists
+  //
+  // Strings containing items wrapped in openning and closing brackets ("[" and "]"),
+  // which allow items to be found within the string even if they are
+  // contained by another.
+  //
+  // Prevents matching an instance of "es" within a longer string like "test", by
+  // storing items like "[es][test]" (instead of simply "es test"), and searching for them
+  // wrapped like "[es]".
+  //
   /**
    * Converts bracketed list string to an array.
    * 
@@ -286,11 +297,9 @@ bt.extend(bt,{
    * returns ['a','b','c'].
    */
   bracketsToArray : function(str){
-    var arr = str.split(']['),
-        len = arr.length;
-    arr[0] = arr[0].substr(1);
-    arr[len-1] = arr[len-1].substr(0,arr[len-1].length-1);
-    return arr;
+    if (str.length > 1)
+      return str.substr(1,str.length-2).split('][');
+    return [];
   },
   /**
    * Converts array to bracketed list string.
@@ -302,6 +311,41 @@ bt.extend(bt,{
   arrayToBrackets : function(arr){
     var str = '';
     if (arr && arr.length) str = '['+arr.join('][')+']';
+    return str;
+  },
+  
+  //
+  // Columned lists
+  //
+  // Similar to bracketed, but using a single pipe ("|") character as a delimiter between
+  // items. Lists must also begin and end with pipe characters to allow items be found by
+  // searching for them wrapped in leading and trailing pipes, like "|es|".
+  //
+  // More efficient than bracketed lists for storage, but more complicated to append and
+  // remove items from.
+  //
+  /**
+   * Converts columned list string to an array.
+   * 
+   * EXAMPLE:
+   * > tt.columnsToArray('|a|b|c|')
+   * returns ['a','b','c'].
+   */
+  columnsToArray : function(str){
+    if (str.length > 1)
+      return str.substr(1,str.length-2).split('|');
+    return [];
+  },
+  /**
+   * Converts array to columned list string.
+   * 
+   * EXAMPLE:
+   * > tt.arrayToColumns(['a','b','c'])
+   * returns '|a|b|c|'.
+   */
+  arrayToColumns : function(arr){
+    var str = '';
+    if (arr && arr.length) str = '|'+arr.join('|')+'|';
     return str;
   }
   
